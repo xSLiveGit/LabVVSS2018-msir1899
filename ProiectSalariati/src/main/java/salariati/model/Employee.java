@@ -148,7 +148,10 @@ public class Employee {
 //			EmployeeValidator validator = new EmployeeValidator();
 			employee.setLastName(attributes[0]);
 			employee.setCnp(attributes[1]);
-
+			if(attributes[2] == null)
+			{
+				throw new EmployeeException("Null function has been given");
+			}
 			switch (attributes[2].toUpperCase()) {
 				case "ASISTENT":
 					employee.setFunction(DidacticFunction.ASISTENT);
