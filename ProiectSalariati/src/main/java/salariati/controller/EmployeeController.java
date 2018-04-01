@@ -21,17 +21,22 @@ public class EmployeeController {
 		this.employeeValidator = validator;
 	}
 	
-	public void addEmployee(Employee employee) throws EmployeeException {
+	public void addEmployee(String[] employeeAttrs) throws EmployeeException {
+	    Employee employee = Employee.getEmployeeFromString(employeeAttrs);
+
 		if(!employeeValidator.isValid(employee)){
-			throw new EmployeeException("Invaid employee");
+			throw new EmployeeException("Invalid employee");
 		}
+
 		List<Employee> employees = employeeRepository.getEmployeeList()
 				.stream()
 				.filter(testEmployee -> employee.getCnp().equals(testEmployee.getCnp()))
 				.collect(Collectors.toList());
+
 		if(employees.size() != 0){
 			throw new EmployeeException("There's already an employee with this cnp");
 		}
+
 		employeeRepository.addEmployee(employee);
 	}
 	
@@ -54,20 +59,28 @@ public class EmployeeController {
 		return employeeRepository.getEmployeeList();
 	}
 	
-	public void modifyEmployee(Employee newEmployee) throws EmployeeException {
+	public void modifyEmployee(String[] employeeAttrs) throws EmployeeException {
+        Employee newEmployee = Employee.getEmployeeFromString(employeeAttrs);
+
+        if(!employeeValidator.isValid(newEmployee)){
+            throw new EmployeeException("New employee is invalid");
+        }
+
 		List<Employee> employees = employeeRepository.getEmployeeList()
 				.stream()
 				.filter(employee -> employee.getCnp().equals(newEmployee.getCnp()))
 				.collect(Collectors.toList());
-		if(employees.size() != 1){
+
+        if(employees.size() != 1){
 			throw new EmployeeException("Invalid employee cnp");
 		}
 
 		employeeRepository.modifyEmployee(employees.get(0), newEmployee);
 	}
 
-	public void deleteEmployee(Employee employee) throws EmployeeException {
-		employeeRepository.deleteEmployee(employee);
+	public void deleteEmployee(String[] employeeAttrs) throws EmployeeException {
+        Employee employee = Employee.getEmployeeFromString(employeeAttrs);
+        employeeRepository.deleteEmployee(employee);
 	}
 	
 }

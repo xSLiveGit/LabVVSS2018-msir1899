@@ -18,10 +18,14 @@ import salariati.validator.EmployeeValidator;
 
 public class EmployeeImpl implements EmployeeRepositoryInterface {
 	
-	private final String employeeDBFile = "employeeDB/employees.txt";
+	private final String employeeDBFile;
 	private EmployeeValidator employeeValidator = new EmployeeValidator();
 
-	@Override
+    public EmployeeImpl(String employeeDBFile) {
+        this.employeeDBFile = employeeDBFile;
+    }
+
+    @Override
 	public void addEmployee(Employee employee) throws EmployeeException {
 		if( employeeValidator.isValid(employee) ) {
             appendEmployee(employee);
@@ -95,11 +99,10 @@ public class EmployeeImpl implements EmployeeRepositoryInterface {
 		List<Employee> employeeList = new ArrayList<>();
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(employeeDBFile))){
-            int counter = 0;
 			String line = br.readLine();
 			while (line != null) {
 				try {
-					Employee employee = Employee.getEmployeeFromString(line, counter);
+					Employee employee = Employee.getEmployeeFromString(line.split(";"));
 					employeeList.add(employee);
 				} catch(EmployeeException ex) {
 					System.err.println("Error while reading: " + ex.toString());

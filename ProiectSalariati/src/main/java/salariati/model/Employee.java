@@ -139,13 +139,11 @@ public class Employee {
 	 * @return if the given line is valid returns the corresponding Employee
 	 * @throws EmployeeException
 	 */
-	public static Employee getEmployeeFromString(String _employee, int line) throws EmployeeException {
+	public static Employee getEmployeeFromString(String[] attributes) throws EmployeeException {
 		Employee employee = new Employee();
 		
-		String[] attributes = _employee.split("[;]");
-		
 		if( attributes.length != 4 ) {
-			throw new EmployeeException("Invalid line at: " + line);
+			throw new EmployeeException("Invalid employee attributes due invalid number of attributes");
 		} else {
 //			EmployeeValidator validator = new EmployeeValidator();
 			employee.setLastName(attributes[0]);
@@ -161,13 +159,11 @@ public class Employee {
 				case "TEACHER":
 					employee.setFunction(DidacticFunction.TEACHER);
 					break;
+				default:
+					throw new EmployeeException("Invalid employee function");
 			}
 			
 			employee.setSalary(attributes[3]);
-			
-//			if( !validator.isValid(employee) ) {
-//				throw new EmployeeException("Invalid line at: " + line);
-//			}
 		}
 		
 		return employee;

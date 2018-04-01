@@ -23,8 +23,8 @@ public class StartApp {
 
 
 	public static void main(String[] args) throws EmployeeException {
-		
-		EmployeeRepositoryInterface employeesRepository = new EmployeeImpl();
+
+		EmployeeRepositoryInterface employeesRepository = new EmployeeImpl("employeeDB/employees.txt");
         EmployeeValidator validator = new EmployeeValidator();
         EmployeeController employeeController = new EmployeeController(employeesRepository, validator);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -92,24 +92,24 @@ public class StartApp {
     }
 
     private static void deleteEmployeeCommand(EmployeeController employeeController, BufferedReader reader) throws IOException, EmployeeException {
-        Employee employee = readEmployee(reader);
-        employeeController.deleteEmployee(employee);
+        String[] employeeAttr = readEmployee(reader);
+        employeeController.deleteEmployee(employeeAttr);
     }
 
     private static void updateEmployeeCommand(EmployeeController employeeController, BufferedReader reader) throws IOException, EmployeeException {
-        Employee employee = readEmployee(reader);
-        employeeController.modifyEmployee(employee);
+        String[] employeeAttr = readEmployee(reader);
+        employeeController.modifyEmployee(employeeAttr);
     }
 
     private static void addEmployeeCommand(EmployeeController employeeController, BufferedReader reader) throws IOException, EmployeeException {
-        Employee employee = readEmployee(reader);
-        employeeController.addEmployee(employee);
+        String[] employeeAttr = readEmployee(reader);
+        employeeController.addEmployee(employeeAttr);
     }
 
-    private static Employee readEmployee(BufferedReader reader) throws IOException, EmployeeException {
+    private static String[] readEmployee(BufferedReader reader) throws IOException {
         System.out.println("Write an employee");
         String employeeString = reader.readLine();
-        return Employee.getEmployeeFromString(employeeString,0);
+        return employeeString.split(";");
     }
 
 }
