@@ -23,18 +23,15 @@ public class EmployeeController {
 	
 	public void addEmployee(String[] employeeAttrs) throws EmployeeException {
 	    Employee employee = Employee.getEmployeeFromString(employeeAttrs);
-
 		if(!employeeValidator.isValid(employee)){
 			throw new EmployeeException("Invalid employee");
 		}
 
-		List<Employee> employees = employeeRepository.getEmployeeList()
-				.stream()
-				.filter(testEmployee -> employee.getCnp().equals(testEmployee.getCnp()))
-				.collect(Collectors.toList());
-
-		if(employees.size() != 0){
-			throw new EmployeeException("There's already an employee with this cnp");
+		List<Employee> employees = employeeRepository.getEmployeeList();
+		for(Employee currentEmployee : employees){
+			if(currentEmployee.getCnp().equals(employee.getCnp())){
+				throw new EmployeeException("There's already an employee with this cnp");
+			}
 		}
 
 		employeeRepository.addEmployee(employee);
